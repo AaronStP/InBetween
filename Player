@@ -1,19 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : PhysicsObject
 {
     //Fields and Variables
+    [Header("Player Stats")]
     [SerializeField] float maxSpeed = 1f;
     [SerializeField] float jumpPower = 10f;
+    [SerializeField] public int health;
 
+    int maxHealth = 100;
+
+    [Header("Misc Elements")]
+    public Text coinText;
+    public Image healthBar;
     public int coinsCollected;
+
+    Vector2 healthBarOriginalSize;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        healthBarOriginalSize = healthBar.rectTransform.sizeDelta;
+        UpdateUIElements();
     }
 
     // Update is called once per frame
@@ -25,5 +36,12 @@ public class Player : PhysicsObject
         {
             velocity.y = jumpPower;
         }
+    }
+
+    //Update UI when collectable is obtained
+    public void UpdateUIElements()
+    {
+        coinText.text = coinsCollected.ToString();
+        healthBar.rectTransform.sizeDelta = new Vector2(healthBarOriginalSize.x * ((float)health / (float)maxHealth), healthBar.rectTransform.sizeDelta.y);
     }
 }
