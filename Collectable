@@ -8,27 +8,13 @@ public class Collectable : MonoBehaviour
     enum ItemType { Coin, Health, Ammmo} //Drop down menu
     [SerializeField] ItemType itemType;
 
+    Player playerRef;
+
     // Start is called before the first frame update
     void Start()
     {
-        //Check what the item is (SWITCH)
-        switch (itemType)
-        {
-            case ItemType.Coin:
-                break;
-            case ItemType.Health:
-                break;
-            case ItemType.Ammmo:
-                break;
-            default:
-                break;
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //Instantiate
+        playerRef = GameObject.Find("Player").GetComponent<Player>();
     }
 
     //Increase the value after collision if Player
@@ -36,7 +22,22 @@ public class Collectable : MonoBehaviour
     {
         if (collision.gameObject.name == "Player")
         {
-            collision.GetComponent<Player>().coinsCollected++;
+            //Check what the item is (SWITCH)
+            switch (itemType)
+            {
+                case ItemType.Coin:
+                    playerRef.coinsCollected++;
+                    break;
+                case ItemType.Health:
+                    if (playerRef.health < 100)
+                        playerRef.health++;
+                    break;
+                case ItemType.Ammmo:
+                    break;
+                default:
+                    break;
+            }
+            playerRef.UpdateUIElements();
             Destroy(gameObject);
         }
     }
