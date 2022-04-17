@@ -6,6 +6,7 @@ public class Player : PhysicsObject
 {
     //Fields and Variables
     [SerializeField] float maxSpeed = 1f;
+    [SerializeField] float jumpPower = 10f;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,7 @@ public class Player : PhysicsObject
         targetVelocity = new Vector2(Input.GetAxis("Horizontal") * maxSpeed, 0);
         if (Input.GetButtonDown("Jump") && grounded) //Grounded from Parent class
         {
-            velocity.y = 10;
+            velocity.y = jumpPower;
         }
     }
 }
