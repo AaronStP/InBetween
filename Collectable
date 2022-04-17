@@ -1,0 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Collectable : MonoBehaviour
+{
+    //Fields and Variables
+    enum ItemType { Coin, Health, Ammmo} //Drop down menu
+    [SerializeField] ItemType itemType;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //Check what the item is (SWITCH)
+        switch (itemType)
+        {
+            case ItemType.Coin:
+                break;
+            case ItemType.Health:
+                break;
+            case ItemType.Ammmo:
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    //Increase the value after collision if Player
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "Player")
+        {
+            collision.GetComponent<Player>().coinsCollected++;
+            Destroy(gameObject);
+        }
+    }
+}
