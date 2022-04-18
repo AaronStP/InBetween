@@ -10,40 +10,30 @@ public class Collectable : MonoBehaviour
     [SerializeField] string inventoryStringName;
     [SerializeField] Sprite inventorySprite;
 
-
-    Player playerRef;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Instantiate
-        playerRef = GameObject.Find("Player").GetComponent<Player>();
-    }
-
     //Increase the value after collision if Player
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name == "Player")
+        if (collision.gameObject == Player.Instance.gameObject)
         {
             //Check what the item is (SWITCH)
             switch (itemType)
             {
                 case ItemType.Coin:
-                    playerRef.coinsCollected++;
+                    Player.Instance.coinsCollected++;
                     break;
                 case ItemType.Health:
-                    if (playerRef.health < 100)
-                        playerRef.health++;
+                    if (Player.Instance.health < 100)
+                        Player.Instance.health++;
                     break;
                 case ItemType.InventoryItem:
-                    playerRef.AddInventoryItem(inventoryStringName, inventorySprite);
+                    Player.Instance.AddInventoryItem(inventoryStringName, inventorySprite);
                     break;
                 case ItemType.Ammmo:
                     break;
                 default:
                     break;
             }
-            playerRef.UpdateUIElements();
+            Player.Instance.UpdateUIElements();
             Destroy(gameObject);
         }
     }

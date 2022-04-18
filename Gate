@@ -1,0 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Gate : MonoBehaviour
+{
+    //Fields and Variables
+    [SerializeField] string requiredInventoryItemString;
+
+    //Required item to open gate check
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject == Player.Instance.gameObject)
+        {
+            if (Player.Instance.inventory.ContainsKey(requiredInventoryItemString))
+            {
+                Player.Instance.RemoveInventoryItem(requiredInventoryItemString);
+                Destroy(gameObject);
+            }
+        }
+    }
+}
