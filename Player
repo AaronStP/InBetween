@@ -24,6 +24,18 @@ public class Player : PhysicsObject
     public Image inventoryItemImage;
     Vector2 healthBarOriginalSize;
 
+    //Singleton Instantiation
+    private static Player instance;
+    public static Player Instance
+    {
+        get
+        {
+            if (instance == null) instance = GameObject.FindObjectOfType<Player>();
+            return instance;
+        }
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
