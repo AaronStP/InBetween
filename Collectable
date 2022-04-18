@@ -5,8 +5,11 @@ using UnityEngine;
 public class Collectable : MonoBehaviour
 {
     //Fields and Variables
-    enum ItemType { Coin, Health, Ammmo} //Drop down menu
+    enum ItemType { Coin, Health, Ammmo, InventoryItem} //Drop down menu
     [SerializeField] ItemType itemType;
+    [SerializeField] string inventoryStringName;
+    [SerializeField] Sprite inventorySprite;
+
 
     Player playerRef;
 
@@ -31,6 +34,9 @@ public class Collectable : MonoBehaviour
                 case ItemType.Health:
                     if (playerRef.health < 100)
                         playerRef.health++;
+                    break;
+                case ItemType.InventoryItem:
+                    playerRef.AddInventoryItem(inventoryStringName, inventorySprite);
                     break;
                 case ItemType.Ammmo:
                     break;
