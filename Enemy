@@ -1,0 +1,35 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Enemy : PhysicsObject
+{
+    //Fields and Variables
+    [SerializeField] float maxSpeed;
+    private int direction = 1;
+
+    //Raycasts
+    [SerializeField] Vector2 raycastOffset;
+    [SerializeField] float raycastLength = 2;
+    private RaycastHit2D rightLedgeRCHit;
+    private RaycastHit2D leftLedgeRCHit;
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Raycasts and Debug for Editor
+        targetVelocity = new Vector2(maxSpeed * direction, 0);
+
+        //Right RC
+        rightLedgeRCHit = Physics2D.Raycast(new Vector2(transform.position.x + raycastOffset.x, transform.position.y + raycastOffset.y), Vector2.down, raycastLength);
+        Debug.DrawRay(new Vector2(transform.position.x + raycastOffset.x, transform.position.y + raycastOffset.y), Vector2.down * raycastLength);
+        if (rightLedgeRCHit.collider == null)
+            direction = -1;
+        
+        //Left RC
+        leftLedgeRCHit = Physics2D.Raycast(new Vector2(transform.position.x - raycastOffset.x, transform.position.y + raycastOffset.y), Vector2.down, raycastLength);
+        Debug.DrawRay(new Vector2(transform.position.x - raycastOffset.x, transform.position.y - raycastOffset.y), Vector2.down * raycastLength);
+        if (leftLedgeRCHit.collider == null)
+            direction = 1;
+    }
+}
