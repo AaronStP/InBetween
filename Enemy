@@ -1,0 +1,62 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Enemy : PhysicsObject
+{
+    //Fields and Variables
+    [SerializeField] float maxSpeed;
+    [SerializeField] int attackPower;
+    private int direction = 1;
+
+    //Raycasts
+    [SerializeField] Vector2 raycastOffset;
+    [SerializeField] float raycastLength = 2;
+    [SerializeField] LayerMask rayCastLayerMask;
+    private RaycastHit2D rightLedgeRCHit;
+    private RaycastHit2D leftLedgeRCHit;
+    private RaycastHit2D rightWallHit;
+    private RaycastHit2D leftWallHit;
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Raycasts and Debug for Editor
+        targetVelocity = new Vector2(maxSpeed * direction, 0);
+
+        //Right RC
+        rightLedgeRCHit = Physics2D.Raycast(new Vector2(transform.position.x + raycastOffset.x, transform.position.y + raycastOffset.y), Vector2.down, raycastLength);
+        Debug.DrawRay(new Vector2(transform.position.x + raycastOffset.x, transform.position.y + raycastOffset.y), Vector2.down * raycastLength);
+        if (rightLedgeRCHit.collider == null)
+            direction = -1;
+        
+        //Left RC
+        leftLedgeRCHit = Physics2D.Raycast(new Vector2(transform.position.x - raycastOffset.x, transform.position.y + raycastOffset.y), Vector2.down, raycastLength);
+        Debug.DrawRay(new Vector2(transform.position.x - raycastOffset.x, transform.position.y - raycastOffset.y), Vector2.down * raycastLength);
+        if (leftLedgeRCHit.collider == null)
+            direction = 1;
+
+        //Right Wall
+        rightWallHit = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y), Vector2.right, raycastLength, rayCastLayerMask);
+        Debug.DrawRay(new Vector2(transform.position.x, transform.position.y), Vector2.right * raycastLength);
+        if (rightWallHit.collider != null)
+            direction = -1;
+
+        //Left Wall
+        leftWallHit = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y), Vector2.left, raycastLength, rayCastLayerMask);
+        Debug.DrawRay(new Vector2(transform.position.x, transform.position.y), Vector2.left * raycastLength);
+        if (leftWallHit.collider != null)
+            direction = 1; 
+    }
+
+    //Player interaction
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject == Player.Instance.gameObject)
+        {
+            Debug.Log("Player hit");
+            Player.Instance.health -= attackPower;
+            Player.Instance.UpdateUIElements();
+        }
+    }
+}
