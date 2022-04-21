@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Player : PhysicsObject
@@ -9,8 +10,10 @@ public class Player : PhysicsObject
     [Header("Player Stats")]
     [SerializeField] float maxSpeed = 1f;
     [SerializeField] float jumpPower = 10f;
+    [SerializeField] private float attackDuration;
     [SerializeField] public int health;
-
+    [SerializeField] GameObject attackBox;
+    public int attackPower = 25;
     int maxHealth = 100;
 
     [Header("Misc Elements")]
@@ -19,6 +22,7 @@ public class Player : PhysicsObject
     public Text coinText;
     public Image healthBar;
     public int coinsCollected;
+    
 
     public Dictionary<string, Sprite> inventory = new Dictionary<string, Sprite>();
     public Image inventoryItemImage;
@@ -26,6 +30,7 @@ public class Player : PhysicsObject
 
     //Singleton Instantiation
     private static Player instance;
+
     public static Player Instance
     {
         get
@@ -34,7 +39,6 @@ public class Player : PhysicsObject
             return instance;
         }
     }
-
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +56,40 @@ public class Player : PhysicsObject
         {
             velocity.y = jumpPower;
         }
+
+        //Change direction when moving
+        if (targetVelocity.x < -.01)
+        {
+            transform.localScale = new Vector2(-1, 1);
+        }
+        else if (targetVelocity.x > 0.01)
+        {
+            transform.localScale = new Vector2(1, 1);
+        }
+
+        //Attack
+        if (Input.GetButtonDown("Fire1"))
+        {
+            StartCoroutine(Attack());
+        }
+
+        //Death check
+        if (health <= 0)
+            Die();
+    }
+
+    //Attack method and Coroutine
+    public IEnumerator Attack()
+    {
+        attackBox.SetActive(true);
+        yield return new WaitForSeconds(attackDuration);
+        attackBox.SetActive(false);
+    }
+
+    //Death controller
+    public void Die()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 
     //Update UI when collectable is obtained
