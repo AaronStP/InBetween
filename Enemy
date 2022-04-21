@@ -7,16 +7,18 @@ public class Enemy : PhysicsObject
     //Fields and Variables
     [SerializeField] float maxSpeed;
     [SerializeField] int attackPower;
-    private int direction = 1;
+    int direction = 1;
+    public int health = 100;
+    int maxHealth = 100;
 
     //Raycasts
     [SerializeField] Vector2 raycastOffset;
     [SerializeField] float raycastLength = 2;
     [SerializeField] LayerMask rayCastLayerMask;
-    private RaycastHit2D rightLedgeRCHit;
-    private RaycastHit2D leftLedgeRCHit;
-    private RaycastHit2D rightWallHit;
-    private RaycastHit2D leftWallHit;
+    RaycastHit2D rightLedgeRCHit;
+    RaycastHit2D leftLedgeRCHit;
+    RaycastHit2D rightWallHit;
+    RaycastHit2D leftWallHit;
 
     // Update is called once per frame
     void Update()
@@ -47,6 +49,12 @@ public class Enemy : PhysicsObject
         Debug.DrawRay(new Vector2(transform.position.x, transform.position.y), Vector2.left * raycastLength);
         if (leftWallHit.collider != null)
             direction = 1; 
+
+        //Death check
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     //Player interaction
@@ -54,7 +62,6 @@ public class Enemy : PhysicsObject
     {
         if (collision.gameObject == Player.Instance.gameObject)
         {
-            Debug.Log("Player hit");
             Player.Instance.health -= attackPower;
             Player.Instance.UpdateUIElements();
         }
