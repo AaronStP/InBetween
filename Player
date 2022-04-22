@@ -17,6 +17,7 @@ public class Player : PhysicsObject
     int maxHealth = 100;
 
     [Header("Misc Elements")]
+    [SerializeField] string levelToLoad;
     public Sprite keySprite;
     public Sprite blankInventory;
     public Text coinText;
@@ -89,7 +90,7 @@ public class Player : PhysicsObject
     //Death controller
     public void Die()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene(levelToLoad);
     }
 
     //Update UI when collectable is obtained
