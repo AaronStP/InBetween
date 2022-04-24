@@ -11,19 +11,20 @@ public class Player : PhysicsObject
     [SerializeField] float maxSpeed = 1f;
     [SerializeField] float jumpPower = 10f;
     [SerializeField] private float attackDuration;
-    [SerializeField] public int health;
-    [SerializeField] GameObject attackBox;
     public int attackPower = 25;
     int maxHealth = 100;
 
-    [Header("Misc Elements")]
+    [Header("Inventory")]
+    [SerializeField] public int health;
+    public int coinsCollected;
+
+    [Header("References")]
     [SerializeField] string levelToLoad;
+    [SerializeField] GameObject attackBox;
     public Sprite keySprite;
     public Sprite blankInventory;
-    public int coinsCollected;
-    
-    public Dictionary<string, Sprite> inventory = new Dictionary<string, Sprite>();
     Vector2 healthBarOriginalSize;
+    public Dictionary<string, Sprite> inventory = new Dictionary<string, Sprite>();
 
     //Singleton Instantiation
     private static Player instance;
