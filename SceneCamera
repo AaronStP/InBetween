@@ -1,0 +1,15 @@
+using Cinemachine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SceneCamera : MonoBehaviour
+{
+    //Fields and variables
+    [SerializeField] CinemachineVirtualCamera cinemachineVirtualCamera;
+
+    void Start()
+    {
+        cinemachineVirtualCamera.Follow = Player.Instance.transform;
+    }
+}
