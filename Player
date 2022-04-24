@@ -20,13 +20,9 @@ public class Player : PhysicsObject
     [SerializeField] string levelToLoad;
     public Sprite keySprite;
     public Sprite blankInventory;
-    public Text coinText;
-    public Image healthBar;
     public int coinsCollected;
     
-
     public Dictionary<string, Sprite> inventory = new Dictionary<string, Sprite>();
-    public Image inventoryItemImage;
     Vector2 healthBarOriginalSize;
 
     //Singleton Instantiation
@@ -41,11 +37,20 @@ public class Player : PhysicsObject
         }
     }
 
+    //Fires before Start
+    void Awake()
+    {
+        if (GameObject.Find("New Player")) Destroy(gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        healthBarOriginalSize = healthBar.rectTransform.sizeDelta;
+        DontDestroyOnLoad(gameObject);
+        gameObject.name = "New Player";
+        healthBarOriginalSize = GameManager.Instance.healthBar.rectTransform.sizeDelta;
         UpdateUIElements();
+        SetSpawnLocation();
     }
 
     // Update is called once per frame
@@ -96,21 +101,27 @@ public class Player : PhysicsObject
     //Update UI when collectable is obtained
     public void UpdateUIElements()
     {
-        coinText.text = coinsCollected.ToString();
-        healthBar.rectTransform.sizeDelta = new Vector2(healthBarOriginalSize.x * ((float)health / (float)maxHealth), healthBar.rectTransform.sizeDelta.y);
+        GameManager.Instance.coinText.text = coinsCollected.ToString();
+        GameManager.Instance.healthBar.rectTransform.sizeDelta = new Vector2(healthBarOriginalSize.x * ((float)health / (float)maxHealth), GameManager.Instance.healthBar.rectTransform.sizeDelta.y);
     }
 
     //Inventory Adding System
     public void AddInventoryItem(string itemName, Sprite itemImage)
     {
         inventory.Add(itemName, itemImage);
-        inventoryItemImage.sprite = inventory[itemName];
+        GameManager.Instance.inventoryItemImage.sprite = inventory[itemName];
     }
 
     //Inventory Removal System
     public void RemoveInventoryItem(string itemName)
     {
         inventory.Remove(itemName);
-        inventoryItemImage.sprite = blankInventory;
+        GameManager.Instance.inventoryItemImage.sprite = blankInventory;
+    }
+
+    //Set Spawn Location
+    public void SetSpawnLocation()
+    {
+        transform.position = GameObject.Find("Spawn Location").transform.position;
     }
 }
